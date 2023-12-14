@@ -9,7 +9,7 @@ def create_incident(name, status, body, impact_override, client_id, product_id, 
 	NGINX_PASSWORD = ""
 
 	user_id = 1
-	headers = {'Content-Type' : 'application/json', 'Authorization' : f'Token {auth_key}'}
+	headers = {'Content-Type' : 'application/json', 'Authorization' : f'{auth_key}'}
 
 	# Atualizar Incident
 	url_incident = URL_BASE + "/api/incidents/incidents/"
@@ -23,7 +23,7 @@ def create_incident(name, status, body, impact_override, client_id, product_id, 
 		'user' : user_id,
 		'components' : components
 	}
-	incident_response = requests.post(url_incident, headers=headers, data=json.dumps(incident_data), auth=(NGINX_USER_NAME, NGINX_PASSWORD))
+	incident_response = requests.post(url_incident, headers=headers, data=json.dumps(incident_data))
 	incident_id = incident_response.json()['id']
 
 	# Atualizar IncidentUpdate
@@ -35,14 +35,14 @@ def create_incident(name, status, body, impact_override, client_id, product_id, 
 		'text': body,
 		'status': status
 	}
-	update_response = requests.post(url_update, headers=headers, data=json.dumps(update_data), auth=(NGINX_USER_NAME, NGINX_PASSWORD))
+	update_response = requests.post(url_update, headers=headers, data=json.dumps(update_data))
 
 	# Atualizar Component
 	url_component = URL_BASE + "/api/components/components/" + str(product_id) + "/"
 	component_data = {
 		'status': damage
 	}
-	component_response = requests.patch(url_component, headers=headers, data=json.dumps(component_data), auth=(NGINX_USER_NAME, NGINX_PASSWORD))
+	component_response = requests.patch(url_component, headers=headers, data=json.dumps(component_data))
 
 name_tag = sys.argv[1] if len(sys.argv) > 1 else None
 status_tag = sys.argv[2] if len(sys.argv) > 2 else None
