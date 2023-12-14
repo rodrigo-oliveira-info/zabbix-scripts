@@ -1,1 +1,1 @@
-echo # zabbix-scripts
+zabbix-scripts
