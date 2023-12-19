@@ -17,10 +17,19 @@ def find_incident_id(name):
 	if 200 <= response.status_code <= 299:
 		data = response.json()
 
-		for incident in data["results"]:
-			if incident["title"] == name and incident["status"] != "resolved":
-				incident_id = incident["id"]
-				return incident_id
+		more_to_search = True
+		while (more_to_search):
+			for incident in data["results"]:
+				if incident["title"] == name and incident["status"] != "resolved":
+					incident_id = incident["id"]
+					return incident_id
+			if response.json()["next"]:
+				url_incident = response.json()["next"]
+				response = requests.get(url_incident, headers=headers)
+				print(response.text)
+				data = response.json()
+			else:
+				more_to_search = False
 
 		return None
 	else:
@@ -57,6 +66,7 @@ product_id_tag = sys.argv[2] if len(sys.argv) > 2 else None
 incident_id = find_incident_id(name_tag)
 
 if incident_id:
+	print("Incidente encontrado: " + str(incident_id))
 	update_incident_status(incident_id, product_id_tag)
 else:
 	print("Incidente não encontrado.")
