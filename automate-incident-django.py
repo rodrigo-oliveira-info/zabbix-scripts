@@ -24,6 +24,7 @@ def create_incident(name, status, body, impact_override, client_id, product_id, 
 		'components' : components
 	}
 	incident_response = requests.post(url_incident, headers=headers, data=json.dumps(incident_data))
+	print(incident_response.text)
 	incident_id = incident_response.json()['id']
 
 	# Atualizar IncidentUpdate
